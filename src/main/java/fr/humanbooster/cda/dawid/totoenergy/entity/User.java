@@ -77,7 +77,12 @@ public class User implements UserDetails {
         return "";
     }
 
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     public boolean isVerified() {
-        return activationCode.isEmpty();
+        return activationCode == null;
     }
 }

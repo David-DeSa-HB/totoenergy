@@ -25,11 +25,6 @@ public class UserController {
         return userService.create(dto);
     }
 
-    @PostMapping("/activate")
-    public void activateUser(@RequestBody String code) {
-        userService.activateUser(code);
-    }
-
     @PutMapping("/{id}")
     public void updateUserById(
             @PathVariable String id,

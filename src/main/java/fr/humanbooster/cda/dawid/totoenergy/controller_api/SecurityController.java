@@ -1,5 +1,6 @@
 package fr.humanbooster.cda.dawid.totoenergy.controller_api;
 
+import fr.humanbooster.cda.dawid.totoenergy.dto.UserActivationDTO;
 import fr.humanbooster.cda.dawid.totoenergy.entity.User;
 import fr.humanbooster.cda.dawid.totoenergy.response.JwtResponse;
 import fr.humanbooster.cda.dawid.totoenergy.security.JwtAuthenticatorService;
@@ -20,12 +21,17 @@ public class SecurityController {
     private final JwtAuthenticatorService jwtAuthenticatorService;
 
     @PostMapping("/register")
-    public User updateSecurityById(@Valid @RequestBody CreateDTO dto) {
+    public User registerUser(@Valid @RequestBody CreateDTO dto) {
         return userService.create(dto);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> securityService(@Valid @RequestBody LoginDTO dto) {
+    public ResponseEntity<JwtResponse> loginUser(@Valid @RequestBody LoginDTO dto) {
         return jwtAuthenticatorService.authenticate(dto);
+    }
+
+    @PutMapping("/activate")
+    public User activateUser(@RequestBody UserActivationDTO code){
+        return userService.activateUser(code.getCode());
     }
 }

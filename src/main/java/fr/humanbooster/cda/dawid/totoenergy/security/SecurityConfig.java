@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/api/login", "/api/register", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                                .requestMatchers("/api/login", "/api/register","/api/activate", "/v3/api-docs/**", "/swagger-ui/**", "/api/user/**").permitAll()
 //                                .requestMatchers(
 //                                        AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/subject/**"),
 //                                        AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/student"),

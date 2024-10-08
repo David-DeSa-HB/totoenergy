@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,6 +33,14 @@ public class UserService implements ServiceUpdateInterface<User, CreateDTO, Upda
         return userRepository
                 .findById(id)
                 .orElseThrow(EntityNotFoundException::new);
+    }
+
+    public User findOneByActivationCode(String code) {
+        System.out.println("UserService.findOneByActivationCode");
+        System.out.println("code = " + code);
+        return userRepository
+                .findByActivationCode(code)
+                .orElseThrow(() -> new NotFoundException("Ton truc marche pô"));
     }
 
     @Override
@@ -67,21 +76,15 @@ public class UserService implements ServiceUpdateInterface<User, CreateDTO, Upda
         return user;
     }
 
-    public User ActivationCode(User user) {
+    public void ActivationCode(User user) {
         user.setActivationCode(UUID.randomUUID().toString());
         user.setActivationCodeSentAt(LocalDateTime.now());
-        return user;
     }
 
-    public void activateUser(String code){
+    public User activateUser(String code){
         User user = findOneByActivationCode(code);
         user.setActivationCode(null);
-    }
-
-    private User findOneByActivationCode(String code) {
-        return userRepository
-                .findByActivationCode(code)
-                .orElseThrow(EntityNotFoundException::new);
+        return userRepository.saveAndFlush(user);
     }
 
     @Override

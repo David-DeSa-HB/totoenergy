@@ -15,8 +15,8 @@ import java.io.Serializable;
 public class FavoriteId implements Serializable {
 
     @Column(name = "user_id")
-    private Long userId;
+    private String userId;
 
     @Column(name = "charging_station_id")
-    private Long chargingStationId;
+    private String chargingStationId;
 }
