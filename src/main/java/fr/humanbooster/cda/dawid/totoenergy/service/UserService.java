@@ -25,7 +25,10 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class UserService implements ServiceUpdateInterface<User, CreateDTO, UpdateDTO, String>, ServiceGetInterface<User, String>, UserDetailsService {
+public class UserService implements ServiceUpdateInterface<User, CreateDTO, UpdateDTO, String>
+        ,ServiceGetInterface<User, String>
+        ,UserDetailsService {
+
     private final UserRepository userRepository;
 
     @Override
