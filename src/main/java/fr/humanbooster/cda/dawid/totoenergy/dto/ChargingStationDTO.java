@@ -5,22 +5,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class BookingCreateDTO {
+public class ChargingStationDTO {
 
     @NotBlank(message = "required field")
-    private LocalDate startedAt;
+    private String name;
+
+    private String accessDirectives;
 
     @NotBlank(message = "required field")
-    private LocalDate finishedAt;
+    private Boolean onFoot;
 
     @NotBlank(message = "required field")
-    private String chargingStation;
+    private Long power;
 
     @NotBlank(message = "required field")
-    private Long userLocalisation;
+    private Long Localisation;
 }

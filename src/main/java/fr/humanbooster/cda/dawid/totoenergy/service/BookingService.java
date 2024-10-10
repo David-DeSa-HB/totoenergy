@@ -4,10 +4,10 @@ package fr.humanbooster.cda.dawid.totoenergy.service;
 import fr.humanbooster.cda.dawid.totoenergy.dto.BookingCreateDTO;
 import fr.humanbooster.cda.dawid.totoenergy.dto.BookingUpdateDTO;
 import fr.humanbooster.cda.dawid.totoenergy.entity.Booking;
-import fr.humanbooster.cda.dawid.totoenergy.entity.User;
 import fr.humanbooster.cda.dawid.totoenergy.repository.BookingRepository;
+import fr.humanbooster.cda.dawid.totoenergy.repository.UserRepository;
 import fr.humanbooster.cda.dawid.totoenergy.service.interfaces.ServiceListInterface;
-import fr.humanbooster.cda.dawid.totoenergy.service.interfaces.ServiceUpdateInterface;
+import fr.humanbooster.cda.dawid.totoenergy.service.interfaces.ServiceUpdateWithPrincipalInterface;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,14 +17,16 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class BookingService implements ServiceListInterface<Booking, String>, ServiceUpdateInterface<Booking, BookingCreateDTO, BookingUpdateDTO, String> {
+public class BookingService implements ServiceListInterface<Booking, String>, ServiceUpdateWithPrincipalInterface<Booking, BookingCreateDTO, BookingUpdateDTO, String, Principal> {
 
     private final BookingRepository bookingRepository;
-    private final UserService userService;
+    private final UserRepository userRepository;
+    private final ChargingStationService chargingStationService;
+    private final UserLocalisationService userLocalisationService;
 
     @Override
-    public Booking create(BookingCreateDTO dto) {
-        Booking booking = new Booking();
+    public Booking create(BookingCreateDTO dto, Principal principal) {
+        Booking booking = bookingFromCreateDTO(new Booking(), dto, principal);
         return bookingRepository.saveAndFlush(booking);
     }
 
@@ -35,7 +37,7 @@ public class BookingService implements ServiceListInterface<Booking, String>, Se
 
     @Override
     public List<Booking> list() {
-        return List.of();
+        return bookingRepository.findAll();
     }
 
     @Override
@@ -50,15 +52,14 @@ public class BookingService implements ServiceListInterface<Booking, String>, Se
         return null;
     }
 
-//    public Booking BookingFromCreateDTO(Booking booking, BookingCreateDTO dto) {
-//        Principal principal = new User()
-//        booking.setStartedAt(dto.getStartedAt());
-//        booking.setFinishedAt(dto.getFinishedAt());
-//        booking.setChargingStation(chargingStationService.findOneById(dto.getChargingStation()));
-//        booking.setChargingStation(userLocalisationRepository.findOneById(dto.getUserLocalisation()));
-//        booking.setUser(userService.findOneById(principal.getClass().get));
-//        return booking;
-//    }
+    public Booking bookingFromCreateDTO(Booking booking, BookingCreateDTO dto, Principal principal) {
+        booking.setStartedAt(dto.getStartedAt());
+        booking.setFinishedAt(dto.getFinishedAt());
+        booking.setChargingStation(chargingStationService.findOneById(dto.getChargingStation()));
+        booking.setUserLocalisation(userLocalisationService.findOneById(dto.getUserLocalisation()));
+        booking.setUser(userRepository.findByEmail(principal.getName()).orElseThrow());
+        return booking;
+    }
 
     public Booking BookingFromUpdateDTO(Booking booking, BookingUpdateDTO dto) {
         booking.setStatus(dto.getStatus());

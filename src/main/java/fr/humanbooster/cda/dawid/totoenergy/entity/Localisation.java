@@ -42,8 +42,4 @@ public class Localisation {
     @ManyToOne
     @JoinColumn(nullable = false)
     private User owner;
-
-    @ManyToOne
-    private UserLocalisation userLocalisation;
-
 }

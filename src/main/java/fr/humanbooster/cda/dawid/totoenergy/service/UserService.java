@@ -1,9 +1,9 @@
 package fr.humanbooster.cda.dawid.totoenergy.service;
 
-import fr.humanbooster.cda.dawid.totoenergy.dto.CreateDTO;
+import fr.humanbooster.cda.dawid.totoenergy.dto.UserCreateDTO;
 import fr.humanbooster.cda.dawid.totoenergy.entity.Role;
 import fr.humanbooster.cda.dawid.totoenergy.repository.UserRepository;
-import fr.humanbooster.cda.dawid.totoenergy.dto.UpdateDTO;
+import fr.humanbooster.cda.dawid.totoenergy.dto.UserUpdateDTO;
 import fr.humanbooster.cda.dawid.totoenergy.entity.User;
 import fr.humanbooster.cda.dawid.totoenergy.service.interfaces.ServiceGetInterface;
 import fr.humanbooster.cda.dawid.totoenergy.service.interfaces.ServiceUpdateInterface;
@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class UserService implements ServiceUpdateInterface<User, CreateDTO, UpdateDTO, String>
+public class UserService implements ServiceUpdateInterface<User, UserCreateDTO, UserUpdateDTO, String>
         ,ServiceGetInterface<User, String>
         ,UserDetailsService {
 
@@ -47,15 +47,15 @@ public class UserService implements ServiceUpdateInterface<User, CreateDTO, Upda
     }
 
     @Override
-    public User create(CreateDTO dto) {
-        User user = UserFromCreateDTO(new User(), dto);
-        ActivationCode(user);
+    public User create(UserCreateDTO dto) {
+        User user = userFromCreateDTO(new User(), dto);
+        activationCode(user);
         return userRepository.saveAndFlush(user);
     }
 
     @Override
-    public User update(UpdateDTO dto, String id) {
-        User user = UserFromUpdateDTO(this.findOneById(id), dto);
+    public User update(UserUpdateDTO dto, String id) {
+        User user = userFromUpdateDTO(this.findOneById(id), dto);
         return userRepository.saveAndFlush(user);
     }
 
@@ -64,7 +64,7 @@ public class UserService implements ServiceUpdateInterface<User, CreateDTO, Upda
         userRepository.delete(user);
     }
 
-    public User UserFromCreateDTO(User user, CreateDTO dto) {
+    public User userFromCreateDTO(User user, UserCreateDTO dto) {
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
         user.setLastName(dto.getLastName());
@@ -72,14 +72,14 @@ public class UserService implements ServiceUpdateInterface<User, CreateDTO, Upda
         return user;
     }
 
-    public User UserFromUpdateDTO(User user, UpdateDTO dto) {
-        UserFromCreateDTO(user, dto);
+    public User userFromUpdateDTO(User user, UserUpdateDTO dto) {
+        userFromCreateDTO(user, dto);
         user.setPhone(dto.getPhone());
         user.setBirthDate(dto.getBirthDate());
         return user;
     }
 
-    public void ActivationCode(User user) {
+    public void activationCode(User user) {
         user.setActivationCode(UUID.randomUUID().toString());
         user.setActivationCodeSentAt(LocalDateTime.now());
     }

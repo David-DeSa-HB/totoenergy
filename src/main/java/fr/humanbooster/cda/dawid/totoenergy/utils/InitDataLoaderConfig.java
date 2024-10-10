@@ -35,17 +35,17 @@ public class InitDataLoaderConfig implements CommandLineRunner {
 
     private void createRoles() {
         if (roleRepository.count() == 0) {
-            Role role = new Role();
-            role.setLabel("ROLE_USER");
-            roleRepository.saveAndFlush(role);
+            Role userRole = new Role();
+            userRole.setLabel("ROLE_USER");
+            roleRepository.saveAndFlush(userRole);
 
-            Role admin = new Role();
-            admin.setLabel("ROLE_ADMIN");
-            roleRepository.saveAndFlush(admin);
+            Role adminRole = new Role();
+            adminRole.setLabel("ROLE_ADMIN");
+            roleRepository.saveAndFlush(adminRole);
 
-            Role superAdmin = new Role();
-            admin.setLabel("ROLE_SUPER_ADMIN");
-            roleRepository.saveAndFlush(admin);
+            Role superAdminRole = new Role();
+            superAdminRole.setLabel("ROLE_SUPER_ADMIN");
+            roleRepository.saveAndFlush(superAdminRole);
         }
     }
 
@@ -72,19 +72,18 @@ public class InitDataLoaderConfig implements CommandLineRunner {
             user.setBirthDate(generateRandomDate(18, 36, 356));
 
             Role userRole = roleRepository.findById(1L).get();
+            Role admin = roleRepository.findById(2L).get();
+            Role superAdmin = roleRepository.findById(3L).get();
             if (i == 1L) {
-                Role admin = roleRepository.findById(2L).get();
+                user.setRoles(List.of(superAdmin, admin, userRole));
+            } else if (i == 2L) {
                 user.setRoles(List.of(admin, userRole));
-            } else {
+            } else
+            {
                 user.setRoles(List.of(userRole));
             }
             userRepository.save(user);
         }
-        Role userRole = new Role();
-        Role adminRole = new Role();
-        userRole.setLabel("ROLE_USER");
-        adminRole.setLabel("ROLE_ADMIN");
-        adminRole.setLabel("ROLE_SUPER_ADMIN");
     }
 
     private LocalDateTime generateRandomDateTime() {

@@ -5,8 +5,8 @@ import fr.humanbooster.cda.dawid.totoenergy.entity.User;
 import fr.humanbooster.cda.dawid.totoenergy.response.JwtResponse;
 import fr.humanbooster.cda.dawid.totoenergy.security.JwtAuthenticatorService;
 import fr.humanbooster.cda.dawid.totoenergy.service.UserService;
-import fr.humanbooster.cda.dawid.totoenergy.dto.LoginDTO;
-import fr.humanbooster.cda.dawid.totoenergy.dto.CreateDTO;
+import fr.humanbooster.cda.dawid.totoenergy.dto.UserLoginDTO;
+import fr.humanbooster.cda.dawid.totoenergy.dto.UserCreateDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +21,12 @@ public class SecurityController {
     private final JwtAuthenticatorService jwtAuthenticatorService;
 
     @PostMapping("/register")
-    public User registerUser(@Valid @RequestBody CreateDTO dto) {
+    public User registerUser(@Valid @RequestBody UserCreateDTO dto) {
         return userService.create(dto);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> loginUser(@Valid @RequestBody LoginDTO dto) {
+    public ResponseEntity<JwtResponse> loginUser(@Valid @RequestBody UserLoginDTO dto) {
         return jwtAuthenticatorService.authenticate(dto);
     }
 

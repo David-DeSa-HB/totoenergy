@@ -1,6 +1,6 @@
 package fr.humanbooster.cda.dawid.totoenergy.security;
 
-import fr.humanbooster.cda.dawid.totoenergy.dto.LoginDTO;
+import fr.humanbooster.cda.dawid.totoenergy.dto.UserLoginDTO;
 import fr.humanbooster.cda.dawid.totoenergy.response.JwtResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ public class JwtAuthenticatorService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public ResponseEntity<JwtResponse> authenticate(LoginDTO dto) {
+    public ResponseEntity<JwtResponse> authenticate(UserLoginDTO dto) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword()));

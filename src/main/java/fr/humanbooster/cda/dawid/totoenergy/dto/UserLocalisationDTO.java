@@ -4,15 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UpdateDTO extends CreateDTO {
+public class UserLocalisationDTO {
 
-    private String phone;
-
-    private LocalDate birthDate;
+    private Boolean isBilling = false;
 }
