@@ -21,7 +21,4 @@ public class Power {
     @Column(nullable = false)
     private Float value;
 
-    @OneToMany(mappedBy = "power")
-    private List<ChargingStation> chargingStations = new ArrayList<>();
-
 }

@@ -7,10 +7,13 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/power")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class PowerController {
 
     private final PowerService powerService;
@@ -18,6 +21,11 @@ public class PowerController {
     @GetMapping("/{id}")
     public Power findPowerBySearch(@PathVariable Long id) {
         return powerService.findOneById(id);
+    }
+
+    @GetMapping
+    public List<Power> findPowers() {
+        return powerService.findAll();
     }
 
     @PostMapping

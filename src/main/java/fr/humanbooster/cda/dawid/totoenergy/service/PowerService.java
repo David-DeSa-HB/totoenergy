@@ -9,6 +9,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class PowerService implements ServiceGetInterface<Power, Long>, ServiceUpdateInterface<Power, PowerDTO, PowerDTO, Long> {
@@ -37,6 +39,12 @@ public class PowerService implements ServiceGetInterface<Power, Long>, ServiceUp
     @Override
     public void delete(Power power) {
         powerRepository.delete(power);
+    }
+
+
+    public List<Power> findAll() {
+        return powerRepository
+                .findAll();
     }
 
     public Power powerFromDTO(Power power, PowerDTO dto) {

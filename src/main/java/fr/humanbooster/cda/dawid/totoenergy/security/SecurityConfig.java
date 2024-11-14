@@ -3,10 +3,10 @@ package fr.humanbooster.cda.dawid.totoenergy.security;
 import fr.humanbooster.cda.dawid.totoenergy.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,6 +33,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain getFilterChain(HttpSecurity http) throws Exception {
         http.securityMatcher("/api/**")
+                .cors(Customizer.withDefaults())
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
@@ -40,7 +41,8 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers("/api/auth/login", "/api/auth/register","/api/activate", "/v3/api-docs/**", "/swagger-ui/**", "/api/user/**").permitAll()
                                 .requestMatchers(
-                                        AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/booking")
+                                        AntPathRequestMatcher.antMatcher("/api/booking/**"),
+                                        AntPathRequestMatcher.antMatcher("/api/power/**")
                                 ).authenticated()
 //                                .requestMatchers(
 //                                        AntPathRequestMatcher.antMatcher("/api/**")
