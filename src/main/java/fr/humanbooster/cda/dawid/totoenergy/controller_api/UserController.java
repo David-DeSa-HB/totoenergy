@@ -1,5 +1,6 @@
 package fr.humanbooster.cda.dawid.totoenergy.controller_api;
 
+import fr.humanbooster.cda.dawid.totoenergy.dto.UserCreateDTO;
 import fr.humanbooster.cda.dawid.totoenergy.dto.UserUpdateDTO;
 import fr.humanbooster.cda.dawid.totoenergy.entity.User;
 import fr.humanbooster.cda.dawid.totoenergy.service.UserService;
@@ -15,14 +16,19 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{id}")
-    public User showUser(@PathVariable String id) {
+    public User showUserById(@PathVariable String id) {
         return userService.findOneById(id);
     }
 
-//    @PostMapping
-//    public User createUser(@Valid @RequestBody UserCreateDTO dto) {
-//        return userService.create(dto);
-//    }
+    @GetMapping("/{email}")
+    public User showUserByEmail(@PathVariable String email) {
+        return userService.findOneByEmail(email);
+    }
+
+    @PostMapping
+    public User createUser(@Valid @RequestBody UserCreateDTO dto) {
+        return userService.create(dto);
+    }
 
     @PutMapping("/{id}")
     public void updateUserById(

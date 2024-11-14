@@ -16,7 +16,7 @@ public class Media {
     private String id;
 
     @Column(nullable = false, unique = true)
-    private String title;
+    private String name;
 
     @Column(nullable = false)
     private String extension;

@@ -1,6 +1,7 @@
 package fr.humanbooster.cda.dawid.totoenergy.service;
 
 import fr.humanbooster.cda.dawid.totoenergy.dto.HourlyRateDTO;
+import fr.humanbooster.cda.dawid.totoenergy.entity.ChargingStation;
 import fr.humanbooster.cda.dawid.totoenergy.entity.HourlyRate;
 import fr.humanbooster.cda.dawid.totoenergy.repository.HourlyRateRepository;
 import fr.humanbooster.cda.dawid.totoenergy.service.interfaces.ServiceGetInterface;
@@ -8,6 +9,9 @@ import fr.humanbooster.cda.dawid.totoenergy.service.interfaces.ServiceUpdateInte
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -28,7 +32,9 @@ public class HourlyRateService implements ServiceGetInterface<HourlyRate, Long>,
 
     @Override
     public HourlyRate findOneById(Long id) {
-        return hourlyRateRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return hourlyRateRepository
+                .findById(id)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
@@ -41,5 +47,14 @@ public class HourlyRateService implements ServiceGetInterface<HourlyRate, Long>,
         hourlyRate.setValue(dto.getValue());
         hourlyRate.setMinimumDuration(dto.getMinimumDuration());
         return hourlyRate;
+    }
+
+    public List<HourlyRate> addHourlyRate(ChargingStation chargingStation, HourlyRateDTO dto){
+        List<HourlyRate> hourlyRates = hourlyRateRepository.findAllByChargingStationId(chargingStation.getId());
+        if (hourlyRates == null){
+            hourlyRates = new ArrayList<>();
+        }
+        hourlyRates.add(create(dto));
+        return hourlyRates;
     }
 }

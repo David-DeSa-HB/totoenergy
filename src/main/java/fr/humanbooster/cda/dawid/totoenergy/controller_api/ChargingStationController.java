@@ -20,5 +20,4 @@ public class ChargingStationController {
     public List<ChargingStation> showAllChargingStation() {
         return chargingStationService.list();
     }
-
 }

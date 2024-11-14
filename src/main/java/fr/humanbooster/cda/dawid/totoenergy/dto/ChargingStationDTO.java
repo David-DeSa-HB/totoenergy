@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -23,4 +24,8 @@ public class ChargingStationDTO {
 
     @NotBlank(message = "required field")
     private Long Localisation;
+
+    private HourlyRateDTO hourlyRateDto;
+
+    private MediaDTO mediaDto;
 }

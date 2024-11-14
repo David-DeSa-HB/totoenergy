@@ -38,6 +38,12 @@ public class UserService implements ServiceUpdateInterface<User, UserCreateDTO, 
                 .orElseThrow(EntityNotFoundException::new);
     }
 
+    public User findOneByEmail(String email) {
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
     public User findOneByActivationCode(String code) {
         System.out.println("UserService.findOneByActivationCode");
         System.out.println("code = " + code);

@@ -14,17 +14,19 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ChargingStationService implements ServiceListInterface<ChargingStation, String>, ServiceUpdateInterface<ChargingStation, ChargingStationDTO, ChargingStationDTO, String> {
+public class ChargingStationService implements ServiceListInterface<ChargingStation, String>,
+        ServiceUpdateInterface<ChargingStation, ChargingStationDTO, ChargingStationDTO, String> {
 
     private final ChargingStationRepository chargingStationRepository;
     private final LocalisationService localisationService;
     private final HourlyRateService hourlyRateService;
+    private final PowerService powerService;
+    private final MediaService mediaService;
+
 
     @Override
     public ChargingStation create(ChargingStationDTO dto) {
         ChargingStation chargingStation = chargingStationFromDTO(new ChargingStation(), dto);
-        chargingStation.setMedias(mediaService.addMedias());
-        chargingStation.setHourlyRates(hourlyRateService.addhourlyRates());
         return chargingStationRepository.save(chargingStation);
     }
 
@@ -61,6 +63,8 @@ public class ChargingStationService implements ServiceListInterface<ChargingStat
         chargingStation.setOnFoot(dto.getOnFoot());
         chargingStation.setPower(powerService.findOneById(dto.getPower()));
         chargingStation.setLocalisation(localisationService.findOneById(dto.getLocalisation()));
+        chargingStation.setHourlyRates(hourlyRateService.addHourlyRate(chargingStation, dto.getHourlyRateDto()));
+        chargingStation.setMedias(mediaService.addMedia(chargingStation, dto.getMediaDto()));
         return chargingStation;
     }
 }

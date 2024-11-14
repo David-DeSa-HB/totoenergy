@@ -17,7 +17,8 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class BookingService implements ServiceListInterface<Booking, String>, ServiceUpdateWithPrincipalInterface<Booking, BookingCreateDTO, BookingUpdateDTO, String, Principal> {
+public class BookingService implements ServiceListInterface<Booking, String>,
+        ServiceUpdateWithPrincipalInterface<Booking, BookingCreateDTO, BookingUpdateDTO, String, Principal> {
 
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
