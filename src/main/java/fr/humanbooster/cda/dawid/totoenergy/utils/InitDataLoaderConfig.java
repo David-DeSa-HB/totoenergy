@@ -99,6 +99,4 @@ public class InitDataLoaderConfig implements CommandLineRunner {
         int days = new Random().nextInt(random);
         return LocalDate.now().minusYears(years).minusDays(days);
     }
-
-
 }

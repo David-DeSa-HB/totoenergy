@@ -1,8 +1,11 @@
 package fr.humanbooster.cda.dawid.totoenergy.security;
+import fr.humanbooster.cda.dawid.totoenergy.entity.Role;
+import fr.humanbooster.cda.dawid.totoenergy.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -11,14 +14,20 @@ import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @Component
 public class JwtService {
 
+    @Autowired
+    private final UserService userService;
+
     private final String secretKey;
 
-    public JwtService() {
+    public JwtService(UserService userService) {
+        this.userService = userService;
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
             SecretKey sk = keyGen.generateKey();
@@ -31,10 +40,12 @@ public class JwtService {
     public String generateToken(String username) {
         // If ya want to add more claims to this token
         // There you add to the "claims" Map
-//        Map<String, Object> claims = new HashMap<>();
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", userService.findOneByEmail(username).getUsername());
+        claims.put("roles", userService.findOneByEmail(username).getRoles().stream().map(Role::getLabel).toList());
         return Jwts.builder()
                 .claims()
-//                .add(claims)
+                .add(claims)
                 .subject(username)
                 .issuer("totoenergy")
                 .issuedAt(new Date(System.currentTimeMillis()))
