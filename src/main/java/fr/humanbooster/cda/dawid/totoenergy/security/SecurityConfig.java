@@ -42,7 +42,6 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/login", "/api/auth/register","/api/activate", "/v3/api-docs/**", "/swagger-ui/**", "/api/user/**").permitAll()
                                 .requestMatchers(
                                         AntPathRequestMatcher.antMatcher("/api/booking/**")
-//                                        AntPathRequestMatcher.antMatcher("/api/power/**")
                                 ).authenticated()
                                 .requestMatchers(
                                         AntPathRequestMatcher.antMatcher("/api/**")

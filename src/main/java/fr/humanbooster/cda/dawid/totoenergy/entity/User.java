@@ -1,5 +1,7 @@
 package fr.humanbooster.cda.dawid.totoenergy.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import fr.humanbooster.cda.dawid.totoenergy.utils.JsonViews;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -20,23 +22,29 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
+    @JsonView(JsonViews.ViewsUserDetails.class)
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @JsonView(JsonViews.ViewsUserDetails.class)
     @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
     private String password;
 
+    @JsonView(JsonViews.ViewsUserMinimal.class)
     @Column(nullable = false)
     private String lastName;
 
+    @JsonView(JsonViews.ViewsUserMinimal.class)
     @Column(nullable = false)
     private String firstName;
 
+    @JsonView(JsonViews.ViewsUserDetails.class)
     private String phone;
 
+    @JsonView(JsonViews.ViewsUserDetails.class)
     private LocalDate birthDate;
 
     private String activationCode;

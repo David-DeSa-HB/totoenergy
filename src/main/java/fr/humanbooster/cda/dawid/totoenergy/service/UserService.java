@@ -60,8 +60,8 @@ public class UserService implements ServiceUpdateInterface<User, UserCreateDTO, 
     }
 
     @Override
-    public User update(UserUpdateDTO dto, String id) {
-        User user = userFromUpdateDTO(this.findOneById(id), dto);
+    public User update(UserUpdateDTO dto, String email) {
+        User user = userFromUpdateDTO(this.findOneByEmail(email), dto);
         return userRepository.saveAndFlush(user);
     }
 
