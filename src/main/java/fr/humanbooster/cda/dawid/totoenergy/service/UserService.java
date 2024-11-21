@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,9 +39,9 @@ public class UserService implements ServiceUpdateInterface<User, UserCreateDTO, 
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public User findOneByEmail(String email) {
+    public User findOneByPrincipal(Principal principal) {
         return userRepository
-                .findByEmail(email)
+                .findByEmail(principal.getName())
                 .orElseThrow(EntityNotFoundException::new);
     }
 
@@ -60,8 +61,8 @@ public class UserService implements ServiceUpdateInterface<User, UserCreateDTO, 
     }
 
     @Override
-    public User update(UserUpdateDTO dto, String email) {
-        User user = userFromUpdateDTO(this.findOneByEmail(email), dto);
+    public User update(UserUpdateDTO dto, Principal principal) {
+        User user = userFromUpdateDTO(this.findOneByPrincipal(principal), dto);
         return userRepository.saveAndFlush(user);
     }
 

@@ -8,8 +8,6 @@ import fr.humanbooster.cda.dawid.totoenergy.service.UserService;
 import fr.humanbooster.cda.dawid.totoenergy.utils.JsonViews;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -27,16 +25,10 @@ public class UserController {
         return userService.findOneById(id);
     }
 
-    @JsonView(JsonViews.ViewsUserMinimal.class)
-    @GetMapping("/email/{email}")
-    public User showUserByEmail(@PathVariable String email) {
-        return userService.findOneByEmail(email);
-    }
-
     @JsonView(JsonViews.ViewsUserDetails.class)
     @GetMapping("/me")
-    public User showLoggedUser(@AuthenticationPrincipal UserDetails principal) {
-        return userService.findOneByEmail(principal.getUsername());
+    public User showLoggedUser(Principal principal) {
+        return userService.findOneByPrincipal(principal);
     }
 
     @JsonView(JsonViews.ViewsUserDetails.class)
@@ -51,7 +43,7 @@ public class UserController {
             Principal principal,
             @Valid @RequestBody UserUpdateDTO dto) {
         if (principal != null) {
-            userService.update(dto, principal.getName());
+            userService.update(dto, principal);
         }
     }
 
