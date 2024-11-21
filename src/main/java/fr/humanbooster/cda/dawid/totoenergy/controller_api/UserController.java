@@ -27,11 +27,11 @@ public class UserController {
         return userService.findOneById(id);
     }
 
-    @JsonView(JsonViews.ViewsUserMinimal.class)
-    @GetMapping("/email/{email}")
-    public User showUserByEmail(@PathVariable String email) {
-        return userService.findOneByEmail(email);
-    }
+//    @JsonView(JsonViews.ViewsUserMinimal.class)
+//    @GetMapping("/email/{email}")
+//    public User showUserByEmail(@PathVariable String email) {
+//        return userService.findOneByEmail(email);
+//    }
 
     @JsonView(JsonViews.ViewsUserDetails.class)
     @GetMapping("/me")
