@@ -1,5 +1,6 @@
 package fr.humanbooster.cda.dawid.totoenergy.dto;
 
+import fr.humanbooster.cda.dawid.totoenergy.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,4 +29,5 @@ public class ChargingStationDTO {
     private HourlyRateDTO hourlyRateDto;
 
     private MediaDTO mediaDto;
+
 }

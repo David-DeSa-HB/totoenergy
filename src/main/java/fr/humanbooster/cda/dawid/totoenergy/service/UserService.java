@@ -6,7 +6,6 @@ import fr.humanbooster.cda.dawid.totoenergy.repository.UserRepository;
 import fr.humanbooster.cda.dawid.totoenergy.dto.UserUpdateDTO;
 import fr.humanbooster.cda.dawid.totoenergy.entity.User;
 import fr.humanbooster.cda.dawid.totoenergy.service.interfaces.ServiceGetInterface;
-import fr.humanbooster.cda.dawid.totoenergy.service.interfaces.ServiceUpdateInterface;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,9 +25,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class UserService implements ServiceUpdateInterface<User, UserCreateDTO, UserUpdateDTO, String>
-        ,ServiceGetInterface<User, String>
-        ,UserDetailsService {
+public class UserService implements ServiceGetInterface<User, String>, UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -44,6 +42,12 @@ public class UserService implements ServiceUpdateInterface<User, UserCreateDTO, 
                 .orElseThrow(EntityNotFoundException::new);
     }
 
+    public User findOneByPrincipal(Principal principal) {
+        return userRepository
+                .findByEmail(principal.getName())
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
     public User findOneByActivationCode(String code) {
         System.out.println("UserService.findOneByActivationCode");
         System.out.println("code = " + code);
@@ -52,20 +56,17 @@ public class UserService implements ServiceUpdateInterface<User, UserCreateDTO, 
                 .orElseThrow(() -> new NotFoundException("Ton truc marche pô"));
     }
 
-    @Override
     public User create(UserCreateDTO dto) {
         User user = userFromCreateDTO(new User(), dto);
         activationCode(user);
         return userRepository.saveAndFlush(user);
     }
 
-    @Override
-    public User update(UserUpdateDTO dto, String email) {
-        User user = userFromUpdateDTO(this.findOneByEmail(email), dto);
+    public User update(UserUpdateDTO dto, Principal principal) {
+        User user = userFromUpdateDTO(this.findOneByPrincipal(principal), dto);
         return userRepository.saveAndFlush(user);
     }
 
-    @Override
     public void delete(User user) {
         userRepository.delete(user);
     }
@@ -90,13 +91,12 @@ public class UserService implements ServiceUpdateInterface<User, UserCreateDTO, 
         user.setActivationCodeSentAt(LocalDateTime.now());
     }
 
-    public User activateUser(String code){
+    public User activateUser(String code) {
         User user = findOneByActivationCode(code);
         user.setActivationCode(null);
         return userRepository.saveAndFlush(user);
     }
 
-    @Override
     public UserDetails loadUserByUsername(String username) {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Connexion Impossible"));
@@ -115,4 +115,5 @@ public class UserService implements ServiceUpdateInterface<User, UserCreateDTO, 
         System.out.println("authorities = " + authorities);
         return authorities;
     }
+
 }

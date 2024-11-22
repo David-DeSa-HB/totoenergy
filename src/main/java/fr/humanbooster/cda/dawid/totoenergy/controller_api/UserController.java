@@ -27,12 +27,6 @@ public class UserController {
         return userService.findOneById(id);
     }
 
-//    @JsonView(JsonViews.ViewsUserMinimal.class)
-//    @GetMapping("/email/{email}")
-//    public User showUserByEmail(@PathVariable String email) {
-//        return userService.findOneByEmail(email);
-//    }
-
     @JsonView(JsonViews.ViewsUserDetails.class)
     @GetMapping("/me")
     public User showLoggedUser(@AuthenticationPrincipal UserDetails principal) {
@@ -51,7 +45,7 @@ public class UserController {
             Principal principal,
             @Valid @RequestBody UserUpdateDTO dto) {
         if (principal != null) {
-            userService.update(dto, principal.getName());
+            userService.update(dto, principal);
         }
     }
 
